@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static\\css\\main.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Taviraj:ital,wght@0,200;1,200&display=swap" rel="stylesheet">
+
+    <title>Compatability Quiz</title>
+</head>
+<body>
+    <div class="match-overview">
+        <h1>All Matches</h1>
+        <table class="matches-table">
+            <tr class="matches-tbl-header">
+                <th>Name</th>
+                <th>Their Match</th>
+                <th>Match Score</th>
+            </tr>
+            {%  for matches in all_matches  %}
+            <tr class="matches-names-score">
+                <td>{{  matches[0]  }}</td>
+                <td>{{  matches[1]  }}</td>
+                <td>{{  matches[2]  }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="match-details">
+        <h1>{{  m_details  }}</h1>
+        {% for details in m_details %}
+        <div class="detail-column">
+            <div class="detail-name">
+                <h3>{{  details[0]  }}</h3>
+                <h4>{{  details[2]  }}</h4>
+            </div>
+            <div class="detail-match">
+                <h3>{{  details[1]  }}</h3>
+                <h4>{{  details[4]  }}</h4>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+</body>
+
+<script src="static\\js\\main.js"></script>
+
+</html>

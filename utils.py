@@ -30,17 +30,16 @@ def extract_answers():
 
 
 
-def _map_answer_code(hdr:list):
-    with open(FILE, 'r', encoding='utf-8') as fn:
-        fn.readline()
-        data = csv.reader(fn)
-
-    for submission in data:
-        pass
+def format_answers(uniques:list, questions:list) -> tuple:
+    return tuple(uniques + questions + ['', ''])
+    
     
 
     
 
 if __name__ == '__main__':
-    d = extract_answers()
-    print(d)
+    d = [1, 2, 3]
+    e = ['1', 'a, ', 't']
+
+    f = format_answers(d, e)
+    print(f)
