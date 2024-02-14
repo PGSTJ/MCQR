@@ -102,41 +102,74 @@ def create_all():
     user_answers_table()
     return True
 
+def _get_class(name:str):
+    return [i[0] for i in curs.execute('SELECT Class_Teacher FROM user_answers WHERE Name=?', (name,))][0]
 
 
 
-def _all_submissions() -> list:
-    return [i for i in curs.execute('SELECT Name FROM user_answers')]
+def find_match():
+    """ Finds match for given submitter, but returns SubmissionComparison object for more versatile manipulation """
 
-def find_match(submitter: str):
-    """ Finds match for given submitter """
-    rmndr = ','.join(UA_QS)
-
-    sub_data =  [i for i in curs.execute(f'SELECT Class_Teacher,{rmndr} FROM user_answers WHERE Name=?', (submitter,))][0]
-    all_subs = _all_submissions()
+    all_subs = [i[0] for i in curs.execute('SELECT Name FROM user_answers')]
+    # print(f'allsubs: {all_subs}')
     
+    # iterate through all submissions
+    # for each submission, compare with answers with all other submissions
+    return [SubmissionComparison(subs, all_subs) for subs in all_subs]
+
+
+class SubmissionComparison():
+    """ Handles all comparison processing and transient data storage/recall """
+    def __init__(self, submitter_name:str, all_subs:list) -> None:
+        self.submitter = submitter_name
+        self.all_subs = all_subs
+
+        self.highest_match_score = 0
+        self.best_match = ''
+
+        self.sub_data = self.sub_info(self.submitter)
+
+        self.compare_all()
+        self.post_init()
+
+    def post_init(self):
+        """ Extract answer profile for best match user for more versatile data manipulation """
+        self.best_match_data = self.sub_info(self.best_match)
 
 
 
+    def compare_all(self):
+        """ Executive for comparing against all other submitters """
+        for subs in self.all_subs:
+            if self.submitter != subs:
+                if self.compare_answers(self.sub_data, self.sub_info(subs)):
+                    self.best_match = subs
+                
+    @staticmethod
+    def sub_info(submitter_name:str) -> list:
+        """ Extract answer profile from DB for specified name """
+        rmndr = ','.join(UA_QS)
+        return [i for i in curs.execute(f'SELECT Class_Teacher,{rmndr} FROM user_answers WHERE Name=?', (submitter_name,))][0]
 
+    def compare_answers(self, answer_set1:list, answer_set2:list) -> int:
+        """ Actual compare functionality; directly comparing each index and reassigning match scores as needed """
+        # arbitrary value to allow comparison across multiple submissions
+        match_score = 0
+        # zip together to directly compare indices
+        for one, two in zip(answer_set1[1:], answer_set2[1:]):
+            if one == two:
+                match_score += 1
 
-
-    # iterate through each person, comparing each set of answers 
-
-
-
-
-
-def compare_answers(answer_set1:list, answer_set2:list) -> int:
-    match_score = 0
-    for one, two in zip(answer_set1, answer_set2):
-        if one == two:
-            match_score += 1
-    return match_score
-        
-
+        # reassign highest match score as needed
+        # return bool mainly to offer differentiation in output and update best match attribute with the highest match score
+        if match_score > self.highest_match_score:
+            self.highest_match_score = match_score
+            return True
+        else:
+            return False
 
 
 if __name__ == '__main__':
-    d = find_match('Alexa Morales')
+    d = _get_class("Alexa Morales")
     print(d)
+    
