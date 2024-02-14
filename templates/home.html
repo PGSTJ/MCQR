@@ -35,16 +35,15 @@
     </div>
 
     <div class="match-details">
-        <h1>{{  m_details  }}</h1>
         {% for details in m_details %}
         <div class="detail-column">
             <div class="detail-name">
-                <h3>{{  details[0]  }}</h3>
-                <h4>{{  details[2]  }}</h4>
+                <h3>{{  details[0]  }} | {{  details[1]  }}</h3>
+                <h4>{{  details[0]  }}</h4>
             </div>
             <div class="detail-match">
-                <h3>{{  details[1]  }}</h3>
-                <h4>{{  details[4]  }}</h4>
+                <h3>{{  details[1]  }}mh3</h3>
+                <h4>{{  details[4]  }}mh4</h4>
             </div>
         </div>
         {% endfor %}

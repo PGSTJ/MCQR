@@ -39,6 +39,11 @@ body {
     padding: 20px;
 }
 
+.matches-names-score:hover {
+    color: white;
+    box-shadow: 3px 7px 10px 10px grey;
+}
+
 .match-overview td {
     padding: 7px;
 }
